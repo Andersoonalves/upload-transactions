@@ -1,7 +1,5 @@
-import { getCustomRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import Category from '../models/Category';
-import CategoriesRepository from '../repositories/CategoriesRepository';
-import AppError from '../errors/AppError';
 
 interface RequestDTO {
   title: string;
@@ -9,14 +7,13 @@ interface RequestDTO {
 
 class CreateCategoryService {
   public async execute({ title }: RequestDTO): Promise<Category> {
-    const categoriesRepository = getCustomRepository(CategoriesRepository);
+    const categoriesRepository = getRepository(Category);
 
     const findCategorySameTitle = await categoriesRepository.findOne({
       where: { title },
     });
 
     if (findCategorySameTitle) {
-      // throw new AppError('This appointment is already booked');
       return findCategorySameTitle;
     }
 
